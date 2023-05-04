@@ -118,13 +118,12 @@ function calcularCustoDirecao(robo, matriz, direcao){
     var coluna = robo.posY;
     var custo = 0;
 
-    var posAChecar = matriz[linha][coluna+1];
-
     if(direcao == "O") {
+        var posAChecar = matriz[linha][coluna+1];
         switch(posAChecar) {
-            case obstaculo : custo += 1000;
+            case obstaculo : custo += 1000; console.log(custo);
             case vazia : custo += 0;
-            case meta : Encontrado();
+            //case meta : Encontrado();
         }
 
         if (robo.direcao == 0) custo += 0;
@@ -135,6 +134,26 @@ function calcularCustoDirecao(robo, matriz, direcao){
         if (robo.direcao == 225) custo += 5;
         if (robo.direcao == 270) custo += 6;
         if (robo.direcao == 315) custo += 7;
+
+        //console.log(custo);
+    }
+    
+    else if(direcao == "S") {
+        var posAChecar = matriz[linha+1][coluna];
+        switch(posAChecar) {
+            case obstaculo : console.log("entrei"); custo += 1000; console.log(custo);
+            case vazia : console.log("entrei"); custo += 0; console.log(custo)
+            //case meta : Encontrado();
+        }
+
+        if (robo.direcao == 0) custo += 0;
+        if (robo.direcao == 45) custo += 3;
+        if (robo.direcao == 90) custo += 4;
+        if (robo.direcao == 135) custo += 3;
+        if (robo.direcao == 180) custo += 2;
+        if (robo.direcao == 225) custo += 1;
+        if (robo.direcao == 270) custo += 0;
+        if (robo.direcao == 315) custo += 1;
     }
 
     return custo;
@@ -154,16 +173,24 @@ function Movimentar(matriz, roboObj, algoritmo) {
 
     if(algoritmo == "vizinho mais proximo") {
         custos.O = calcularCustoDirecao(roboObj, matrizInicial, "O");
+        custos.S = calcularCustoDirecao(roboObj, matrizInicial, "S");
+
         //console.log(custos.O);
         var valoresCustos = [];
 
         for (var direcao in custos) {
             valoresCustos.push(custos[direcao]);
+            console.log(custos[direcao]);
         }
-        
-        var menorCusto = Object.keys(custos).find(key => custos[key] === Math.min(valoresCustos));
 
-        roboObj.movimento = menorCusto;
+        var menor = Math.min.apply(Math, valoresCustos);
+        console.log(menor);
+
+        var menorCusto = [];
+        
+        menorCusto.push(Object.keys(custos).find(key => custos[key] === menor));
+
+        roboObj.movimento = menorCusto[0];
 
         matriz[roboObj.posX][roboObj.posY] = vazia;
 
@@ -171,10 +198,16 @@ function Movimentar(matriz, roboObj, algoritmo) {
             roboObj.posY += 1;
         }
 
+        else if(roboObj.movimento = "S") {
+            roboObj.posX += 1;
+        }
+
+
         matriz[roboObj.posX][roboObj.posY] = robo;
 
         console.clear();
         console.log("\n");
+        console.log(custos);
         Exibir(matrizInicial);
     }
     else if(algoritmo == "a*") {
@@ -186,14 +219,19 @@ function Atualizar() {
     Exibir(matrizInicial);
 }
 
-var roboObj = Iniciar();
+function main() {
+    var roboObj = Iniciar();
 
-while (encontradoSt == false) {
-    setTimeout(() => {
-        while(matrizInicial[9][9] != robo) {
-            console.log("entrei");
-            Movimentar(matrizInicial, roboObj, "vizinho mais proximo");
-        } 
-    }, 2000);
+    function executarMovimentacao() {
+        if (matrizInicial[9][9] !== robo) {
+        Movimentar(matrizInicial, roboObj, "vizinho mais proximo");
+        setTimeout(executarMovimentacao, 2000);
+        }
+    }
+    
+    setTimeout(executarMovimentacao, 2000);
 }
+
+main();
+
 
