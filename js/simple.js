@@ -29,8 +29,28 @@ var obstaculo = "□";
 var meta = "x";
 var robo = "■";
 var encontrado = "●";
+var encontradoSt = false;
 
 var matrizInicial = [];
+
+class Robo {
+    constructor(posX, posY) {
+        this.posX = posX;
+        this.posY = posY;
+        var direcao = 0;
+        
+        var movimento = {
+            N : 90,
+            NL: 45,
+            L: 0,
+            SE: 315,
+            S: 270,
+            SO: 225,
+            O: 180,
+            NO: 135
+        }
+      }
+}
 
 function pegarPosAleatoria(matriz) {
     return [(Math.floor(Math.random()*10)), (Math.floor(Math.random()*10))];   
@@ -76,6 +96,9 @@ function Iniciar() {
     }
 
     criarObstaculos(matrizInicial);
+
+    var roboObj = new Robo(0, 0);
+
     matrizInicial[0][0] = robo;
     matrizInicial[9][9] = meta;
 
@@ -83,10 +106,10 @@ function Iniciar() {
 
     Exibir(matrizInicial);
 
-    var robo = new Robo(0, 0);
+    return roboObj;
 }
 
-function Ecnontrado() {
+function Encontrado() {
 
 }
 
@@ -113,30 +136,11 @@ function calcularCustoDirecao(robo, matriz, direcao){
         if (robo.direcao == 270) custo += 6;
         if (robo.direcao == 315) custo += 7;
     }
+
+    return custo;
 }
 
-class Robo {
-    constructor(posX, posY) {
-        this.posX = posX;
-        this.posY = posY;
-        var direcao = 0;
-        
-        var movimento = {
-            N : 90,
-            NL: 45,
-            L: 0,
-            SE: 315,
-            S: 270,
-            SO: 225,
-            O: 180,
-            NO: 135
-        }
-
-      }
-      
-}
-
-function Movimentar(matriz, robo, algoritmo) {
+function Movimentar(matriz, roboObj, algoritmo) {
     var custos = {
         N : 0,
         NL: 0,
@@ -148,8 +152,9 @@ function Movimentar(matriz, robo, algoritmo) {
         NO: 0
     }
 
-    if(algoritmo == "vizinho mais próximo") {
-        custos.O = calcularCustoDirecao(robo, matrizInicial, "O");
+    if(algoritmo == "vizinho mais proximo") {
+        custos.O = calcularCustoDirecao(roboObj, matrizInicial, "O");
+        //console.log(custos.O);
         var valoresCustos = [];
 
         for (var direcao in custos) {
@@ -158,15 +163,19 @@ function Movimentar(matriz, robo, algoritmo) {
         
         var menorCusto = Object.keys(custos).find(key => custos[key] === Math.min(valoresCustos));
 
-        robo.movimento = menorCusto;
+        roboObj.movimento = menorCusto;
 
-        matriz[robo.posX][robo.posY] = vazia;
+        matriz[roboObj.posX][roboObj.posY] = vazia;
 
-        if(robo.movimento = "O") {
-            robo.posY += 1;
+        if(roboObj.movimento = "O") {
+            roboObj.posY += 1;
         }
 
-        matriz[robo.posX][robo.posY] = robo;
+        matriz[roboObj.posX][roboObj.posY] = robo;
+
+        console.clear();
+        console.log("\n");
+        Exibir(matrizInicial);
     }
     else if(algoritmo == "a*") {
 
@@ -177,12 +186,14 @@ function Atualizar() {
     Exibir(matrizInicial);
 }
 
-Iniciar();
+var roboObj = Iniciar();
 
-while(matrizInicial[9][9] != robo) {
-    Movimentar(matrizInicial, robo, "vizinho mais proximo");
-    setInterval(Atualizar, 100);
+while (encontradoSt == false) {
+    setTimeout(() => {
+        while(matrizInicial[9][9] != robo) {
+            console.log("entrei");
+            Movimentar(matrizInicial, roboObj, "vizinho mais proximo");
+        } 
+    }, 2000);
 }
-
-
 
