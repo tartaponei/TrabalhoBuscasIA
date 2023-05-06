@@ -14,7 +14,7 @@ Seguir na direção atual = 0
 */
 
 /*
-R1: ir pro oeste
+R1: ir pro leste
 R2: ir pro nordeste
 R3: ir pro norte
 R4: ir pro noroeste
@@ -118,62 +118,120 @@ function calcularCustoDirecao(robo, matriz, direcao){
     var coluna = robo.posY;
     var custo = 0;
 
-    if(direcao == "O") {
-        var posAChecar = matriz[linha][coluna+1];
-        switch(posAChecar) {
-            case obstaculo : custo += 1000; console.log(custo);
-            case vazia : custo += 0;
-            //case meta : Encontrado();
+    console.log(linha + ", " + coluna);
+
+    switch(direcao) {
+        case "O":
+            if (coluna == 0) {
+                custo+=1000; // pra não passar da borda da direita
+                break;
+            }
+
+            var posAChecar = matriz[linha][coluna-1];
+            switch(posAChecar) {
+                case obstaculo : custo += 1000; console.log(custo);
+                case vazia : custo += 0;
+                //case meta : Encontrado();
+            }
+
+            if (robo.direcao == 0) custo += 4;
+            if (robo.direcao == 45) custo += 3;
+            if (robo.direcao == 90) custo += 2;
+            if (robo.direcao == 135) custo += 1;
+            if (robo.direcao == 180) custo += 0;
+            if (robo.direcao == 225) custo += 1;
+            if (robo.direcao == 270) custo += 2;
+            if (robo.direcao == 315) custo += 3;
+
+        case "N":
+            if (linha == 0) {
+                custo+=1000; // pra não passar da borda de cima
+                return custo;
+            }
+
+            var posAChecar = matriz[linha-1][coluna];
+            switch(posAChecar) {
+                case obstaculo : custo += 1000; console.log(custo);
+                case vazia : custo += 0;
+                //case meta : Encontrado();
+            }
+
+            if (robo.direcao == 0) custo += 2;
+            if (robo.direcao == 45) custo += 1;
+            if (robo.direcao == 90) custo += 0;
+            if (robo.direcao == 135) custo += 1;
+            if (robo.direcao == 180) custo += 2;
+            if (robo.direcao == 225) custo += 3;
+            if (robo.direcao == 270) custo += 4;
+            if (robo.direcao == 315) custo += 3;
+
+        case "L":
+            if (coluna == 9) {
+                custo+=1000; // pra não passar da borda da direita
+                return custo;
+            }
+
+            var posAChecar = matriz[linha][coluna+1];
+            switch(posAChecar) {
+                case obstaculo : custo += 1000; console.log(custo);
+                case vazia : custo += 0;
+                //case meta : Encontrado();
+            }
+
+            if (robo.direcao == 0) custo += 0;
+            if (robo.direcao == 45) custo += 1;
+            if (robo.direcao == 90) custo += 2;
+            if (robo.direcao == 135) custo += 3;
+            if (robo.direcao == 180) custo += 4;
+            if (robo.direcao == 225) custo += 5;
+            if (robo.direcao == 270) custo += 6;
+            if (robo.direcao == 315) custo += 7;
+
+        case "S":
+            if (linha == 9) {
+                custo+=1000; // pra não passar da borda de baixo
+                return custo;
+            }
+
+            var posAChecar = matriz[linha+1][coluna];
+
+            switch(posAChecar) {
+                case obstaculo : console.log("entrei"); custo += 1000; console.log(custo);
+                case vazia : console.log("entrei"); custo += 0; console.log(custo)
+                //case meta : Encontrado();
+            }
+
+            if (robo.direcao == 0) custo += 0;
+            if (robo.direcao == 45) custo += 3;
+            if (robo.direcao == 90) custo += 4;
+            if (robo.direcao == 135) custo += 3;
+            if (robo.direcao == 180) custo += 2;
+            if (robo.direcao == 225) custo += 1;
+            if (robo.direcao == 270) custo += 0;
+            if (robo.direcao == 315) custo += 1;
         }
-
-        if (robo.direcao == 0) custo += 0;
-        if (robo.direcao == 45) custo += 1;
-        if (robo.direcao == 90) custo += 2;
-        if (robo.direcao == 135) custo += 3;
-        if (robo.direcao == 180) custo += 4;
-        if (robo.direcao == 225) custo += 5;
-        if (robo.direcao == 270) custo += 6;
-        if (robo.direcao == 315) custo += 7;
-
-        //console.log(custo);
-    }
     
-    else if(direcao == "S") {
-        var posAChecar = matriz[linha+1][coluna];
-        switch(posAChecar) {
-            case obstaculo : console.log("entrei"); custo += 1000; console.log(custo);
-            case vazia : console.log("entrei"); custo += 0; console.log(custo)
-            //case meta : Encontrado();
-        }
-
-        if (robo.direcao == 0) custo += 0;
-        if (robo.direcao == 45) custo += 3;
-        if (robo.direcao == 90) custo += 4;
-        if (robo.direcao == 135) custo += 3;
-        if (robo.direcao == 180) custo += 2;
-        if (robo.direcao == 225) custo += 1;
-        if (robo.direcao == 270) custo += 0;
-        if (robo.direcao == 315) custo += 1;
-    }
-
     return custo;
 }
 
+
 function Movimentar(matriz, roboObj, algoritmo) {
     var custos = {
-        N : 0,
-        NL: 0,
-        L: 0,
-        SE: 0,
-        S: 0,
-        SO: 0,
+        L : 0,
+        //NL: 0,
+        N: 0,
+        //SE: 0,
         O: 0,
-        NO: 0
+        //SO: 0,
+        S: 0
+        //NO: 0
     }
 
     if(algoritmo == "vizinho mais proximo") {
         custos.O = calcularCustoDirecao(roboObj, matrizInicial, "O");
         custos.S = calcularCustoDirecao(roboObj, matrizInicial, "S");
+        custos.L = calcularCustoDirecao(roboObj, matrizInicial, "L");
+        custos.N = calcularCustoDirecao(roboObj, matrizInicial, "N");
 
         //console.log(custos.O);
         var valoresCustos = [];
@@ -186,23 +244,35 @@ function Movimentar(matriz, roboObj, algoritmo) {
         var menor = Math.min.apply(Math, valoresCustos);
         console.log(menor);
 
-        var menorCusto = [];
+        //var menorCusto = [];
         
-        menorCusto.push(Object.keys(custos).find(key => custos[key] === menor));
+        //menorCusto.push(Object.keys(custos).find(key => custos[key] == menor));
+        var menorCusto = Object.keys(custos).filter(i => custos[i] == 0);
 
+        console.log(menorCusto);
         roboObj.movimento = menorCusto[0];
+        console.log(menorCusto[0]);
+        console.log(roboObj.movimento);
 
         matriz[roboObj.posX][roboObj.posY] = vazia;
 
-        if(roboObj.movimento = "O") {
+        if(roboObj.movimento == "L") {
             roboObj.posY += 1;
         }
 
-        else if(roboObj.movimento = "S") {
+        else if(roboObj.movimento == "S") {
             roboObj.posX += 1;
         }
 
+        else if(roboObj.movimento == "O") {
+            roboObj.posY -= 1;
+        }
 
+        else if(roboObj.movimento == "N") {
+            roboObj.posX -= 1;
+        }
+
+        console.log(roboObj.posX + ", " + roboObj.posY);
         matriz[roboObj.posX][roboObj.posY] = robo;
 
         console.clear();
