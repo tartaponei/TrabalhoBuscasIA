@@ -61,7 +61,7 @@ function gerarNumeroAleatorio(max) {
 }
 
 function criarObstaculos(matriz) {
-    var numObstaculos = gerarNumeroAleatorio(30);
+    var numObstaculos = gerarNumeroAleatorio(40);
 
     for(var i = 0; i < numObstaculos; i++) {
         var gerados = [];
@@ -110,7 +110,7 @@ function Iniciar() {
 }
 
 function Encontrado() {
-
+    console.log("O ROBÔ CONSEGUIU :)");
 }
 
 function calcularCustoDirecao(robo, matriz, direcao){
@@ -124,14 +124,14 @@ function calcularCustoDirecao(robo, matriz, direcao){
         case "O":
             if (coluna == 0) {
                 custo+=1000; // pra não passar da borda da direita
-                break;
+                return custo;
             }
 
             var posAChecar = matriz[linha][coluna-1];
+            console.log(posAChecar);
             switch(posAChecar) {
                 case obstaculo : custo += 1000; console.log(custo);
                 case vazia : custo += 0;
-                //case meta : Encontrado();
             }
 
             if (robo.direcao == 0) custo += 4;
@@ -153,7 +153,6 @@ function calcularCustoDirecao(robo, matriz, direcao){
             switch(posAChecar) {
                 case obstaculo : custo += 1000; console.log(custo);
                 case vazia : custo += 0;
-                //case meta : Encontrado();
             }
 
             if (robo.direcao == 0) custo += 2;
@@ -171,11 +170,14 @@ function calcularCustoDirecao(robo, matriz, direcao){
                 return custo;
             }
 
+            console.log(posAChecar);
+
             var posAChecar = matriz[linha][coluna+1];
+
+            console.log(posAChecar == obstaculo);
             switch(posAChecar) {
                 case obstaculo : custo += 1000; console.log(custo);
                 case vazia : custo += 0;
-                //case meta : Encontrado();
             }
 
             if (robo.direcao == 0) custo += 0;
@@ -196,9 +198,8 @@ function calcularCustoDirecao(robo, matriz, direcao){
             var posAChecar = matriz[linha+1][coluna];
 
             switch(posAChecar) {
-                case obstaculo : console.log("entrei"); custo += 1000; console.log(custo);
-                case vazia : console.log("entrei"); custo += 0; console.log(custo)
-                //case meta : Encontrado();
+                case obstaculo : custo += 1000; console.log(custo);
+                case vazia : custo += 0; console.log(custo)
             }
 
             if (robo.direcao == 0) custo += 0;
@@ -233,23 +234,19 @@ function Movimentar(matriz, roboObj, algoritmo) {
         custos.L = calcularCustoDirecao(roboObj, matrizInicial, "L");
         custos.N = calcularCustoDirecao(roboObj, matrizInicial, "N");
 
-        //console.log(custos.O);
         var valoresCustos = [];
 
         for (var direcao in custos) {
             valoresCustos.push(custos[direcao]);
-            console.log(custos[direcao]);
+            //console.log(custos[direcao]);
         }
 
         var menor = Math.min.apply(Math, valoresCustos);
-        console.log(menor);
+        //console.log(menor);
 
-        //var menorCusto = [];
-        
-        //menorCusto.push(Object.keys(custos).find(key => custos[key] == menor));
-        var menorCusto = Object.keys(custos).filter(i => custos[i] == 0);
+        var menorCusto = Object.keys(custos).filter(i => custos[i] == menor && custos[i] < 1000);
 
-        console.log(menorCusto);
+        //console.log(menorCusto);
         roboObj.movimento = menorCusto[0];
         console.log(menorCusto[0]);
         console.log(roboObj.movimento);
@@ -279,6 +276,8 @@ function Movimentar(matriz, roboObj, algoritmo) {
         console.log("\n");
         console.log(custos);
         Exibir(matrizInicial);
+
+        if(roboObj.posY == 9 && roboObj.posX == 9) Encontrado();
     }
     else if(algoritmo == "a*") {
 
