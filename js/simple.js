@@ -343,7 +343,8 @@ function Movimentar(matriz, roboObj, algoritmo) {
         roboObj.passos += 1;
 
         if (roboObj.posY == 9 && roboObj.posX == 9) {
-            matriz[9][9] = encontrada;
+            matriz[9][9] = encontrada; 
+            console.clear();
             Exibir(matriz);
             Encontrado(roboObj.passos);
         }
@@ -364,11 +365,11 @@ function main() {
     function executarMovimentacao() {
         if (matrizInicial[9][9] !== encontrada) { /// se o robo não tiver chegado
             Movimentar(matrizInicial, roboObj, "vizinho mais proximo");
-            setTimeout(executarMovimentacao, 700);
+            setTimeout(executarMovimentacao, 500);
         }
     }
 
-    setTimeout(executarMovimentacao, 700);
+    setTimeout(executarMovimentacao, 500);
 }
 
 //main();
