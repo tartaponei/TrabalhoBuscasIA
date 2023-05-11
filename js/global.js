@@ -1,16 +1,16 @@
 /* 
-0 = branco, célula vazia -> *
-1 = azul, contém um obstáculo -> □
-2 = laranja, contém a meta -> x
-3 = verde, contém o robô -> ■
-4 = vermelha, meta encontrada -> ●
+    0 = branco, célula vazia -> *
+    1 = azul, contém um obstáculo -> □
+    2 = laranja, contém a meta -> x
+    3 = verde, contém o robô -> ■
+    4 = vermelha, meta encontrada -> ●
 */
 
 /* 
-Ficar parado = 1000
-Girar 45º = 1
-Bater em um obstáculo = 1000
-Seguir na direção atual = 0
+    Ficar parado = 1000
+    Girar 45º = 1
+    Bater em um obstáculo = 1000
+    Seguir na direção atual = 0
 */
 
 const vazia = "*";
@@ -90,33 +90,6 @@ function Exibir(matriz) {
         }
         console.log(linha);
     }
-}
-
-function Iniciar() {
-    for (var i = 0; i < numLinhasMatriz; i++) {
-        var vetor = [];
-        for (var p = 0; p < numColunasMatriz; p++) {
-            vetor.push(vazia)
-        }
-        matrizInicial.push(vetor);
-    }
-
-    criarObstaculos(matrizInicial);
-
-    var roboObj = new Robo(0, 0, 0, "O");
-
-    matrizInicial[inicioX][inicioX] = robo;
-    matrizInicial[fimY][fimY] = meta;
-
-    console.log("\n");
-
-    Exibir(matrizInicial);
-
-    return roboObj;
-}
-
-function Atualizar() {
-    Exibir(matrizInicial);
 }
 
 function Encontrado(passos) {
@@ -207,6 +180,43 @@ function RealizarMovimento(robo) {
     robo.direcao = movimentos[robo.movimento].direcao;
 }
 
-//export {Iniciar, matrizInicial};
-//module.exports = Iniciar;
-////module.exports = matrizInicial;
+function Rodar(algoritmo) {
+    var roboObj = Iniciar();
+
+    function executarMovimentacao() {
+        if (matrizInicial[fimX][fimY] !== encontrada) { /// se o robo não tiver chegado
+            if(algoritmo == "a estrela") VerificarMovimentosAEstrela(matrizInicial, roboObj);
+            else if(algoritmo == "vizinho mais proximo") VerificarMovimentosVizProx(matrizInicial, roboObj);
+            setTimeout(executarMovimentacao, 500);
+        }
+    }
+
+    setTimeout(executarMovimentacao, 500);
+}
+
+function Iniciar() {
+    for (var i = 0; i < numLinhasMatriz; i++) {
+        var vetor = [];
+        for (var p = 0; p < numColunasMatriz; p++) {
+            vetor.push(vazia)
+        }
+        matrizInicial.push(vetor);
+    }
+
+    criarObstaculos(matrizInicial);
+
+    var roboObj = new Robo(0, 0, 0, "O");
+
+    matrizInicial[inicioX][inicioX] = robo;
+    matrizInicial[fimY][fimY] = meta;
+
+    console.log("\n");
+
+    Exibir(matrizInicial);
+
+    return roboObj;
+}
+
+function Atualizar() {
+    Exibir(matrizInicial);
+}

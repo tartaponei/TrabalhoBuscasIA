@@ -1,27 +1,27 @@
 /* 
-0 = branco, célula vazia -> *
-1 = azul, contém um obstáculo -> □
-2 = laranja, contém a meta -> x
-3 = verde, contém o robô -> ■
-4 = vermelha, meta encontrada -> ●
+    0 = branco, célula vazia -> *
+    1 = azul, contém um obstáculo -> □
+    2 = laranja, contém a meta -> x
+    3 = verde, contém o robô -> ■
+    4 = vermelha, meta encontrada -> ●
 */
 
 /* 
-Ficar parado = 1000
-Girar 45º = 1
-Bater em um obstáculo = 1000
-Seguir na direção atual = 0
+    Ficar parado = 1000
+    Girar 45º = 1
+    Bater em um obstáculo = 1000
+    Seguir na direção atual = 0
 */
 
 /*
-R1: ir pro leste
-R2: ir pro sudeste
-R3: ir pro sul
-R4: ir pro sudoeste
-R5: ir pro oeste
-R6: ir pro noroeste
-R7: ir pro norte
-R8: ir pro nordeste
+    R1: ir pro leste
+    R2: ir pro sudeste
+    R3: ir pro sul
+    R4: ir pro sudoeste
+    R5: ir pro oeste
+    R6: ir pro noroeste
+    R7: ir pro norte
+    R8: ir pro nordeste
 */
 function VerificarMovimentosVizProx(matriz, robo) {
     var custos = { // estão na ordem de prioridade
@@ -299,16 +299,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
 }
 
 function vizinho_prox() {
-    var roboObj = Iniciar();
-
-    function executarMovimentacao() {
-        if (matrizInicial[9][9] !== encontrada) { /// se o robo não tiver chegado
-            VerificarMovimentosVizProx(matrizInicial, roboObj);
-            setTimeout(executarMovimentacao, 500);
-        }
-    }
-
-    setTimeout(executarMovimentacao, 500);
+    Rodar("vizinho mais proximo");
 }
 
 //main();
