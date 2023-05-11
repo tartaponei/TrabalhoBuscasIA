@@ -121,6 +121,20 @@ function Encontrado(passos) {
     console.log(passos + " passos foram dados");
 }
 
+function ChecarPosicao(posAChecar) {
+    custo = 0;
+
+    if(posAChecar == obstaculo) {
+        custo += 1000; console.log(custo);
+    }
+
+    else if(posAChecar == vazia) {
+        custo += 0;
+    }
+
+    return custo;
+}
+
 function CalcularCustoGPT(robo, matriz, direcao) {
     const movimentos = {
         O: { deltaColuna: -1, deltaLinha: 0 },
@@ -338,12 +352,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
 
         //console.log(posAChecar == obstaculo);
 
-        if(posAChecar == obstaculo) {
-            custo += 1000; console.log(custo);
-        }
-        else if(posAChecar == vazia) {
-            custo += 0;
-        }
+        custo += ChecarPosicao(posAChecar);
 
         if (robo.direcao == 0) custo += 1;
         else if (robo.direcao == 45) custo += 2;
@@ -537,8 +546,17 @@ function EscolherMovimento(matriz, roboObj, algoritmo) {
         custos.N = calcularCustoDirecao(roboObj, matrizInicial, "N");
         custos.SL = calcularCustoDirecao(roboObj, matrizInicial, "SL");
         custos.SO = calcularCustoDirecao(roboObj, matrizInicial, "SO");
-        custos.NO = calcularCustoDirecao(roboObj, matrizInicial, "SL");
-        custos.NL = calcularCustoDirecao(roboObj, matrizInicial, "SL");
+        custos.NO = calcularCustoDirecao(roboObj, matrizInicial, "NO");
+        custos.NL = calcularCustoDirecao(roboObj, matrizInicial, "NL");
+
+        // custos.L = CalcularCustoGPT(roboObj, matrizInicial, "L");
+        // custos.S = CalcularCustoGPT(roboObj, matrizInicial, "S");
+        // custos.O = CalcularCustoGPT(roboObj, matrizInicial, "O");
+        // custos.N = CalcularCustoGPT(roboObj, matrizInicial, "N");
+        // custos.SL = CalcularCustoGPT(roboObj, matrizInicial, "SL");
+        // custos.SO = CalcularCustoGPT(roboObj, matrizInicial, "SO");
+        // custos.NO = CalcularCustoGPT(roboObj, matrizInicial, "SL");
+        // custos.NL = CalcularCustoGPT(roboObj, matrizInicial, "SL");
 
         var valoresCustos = [];
 
@@ -601,4 +619,4 @@ function main() {
     setTimeout(executarMovimentacao, 500);
 }
 
-//main();
+main();
