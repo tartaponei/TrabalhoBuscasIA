@@ -33,7 +33,7 @@ function EscolherMovimento(matriz, roboObj, algoritmo) {
         NO: 0,
         N: 0,
         NL: 0,
-        X: 10000 // ficar parado
+        X: custoMaximo // ficar parado
     }
 
     custos.L = calcularCustoDirecao(roboObj, matrizInicial, "L");
@@ -64,7 +64,8 @@ function EscolherMovimento(matriz, roboObj, algoritmo) {
     var menor = Math.min.apply(Math, valoresCustos);
     //console.log(menor);
 
-    var menorCusto = Object.keys(custos).filter(i => custos[i] == menor && custos[i] < 1000);
+    
+    var menorCusto = PegarMenorCusto(custos, menor); // pega a key
 
     //console.log(menorCusto);
     roboObj.movimento = menorCusto[0];
@@ -105,7 +106,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
 
     if (direcao == "O") {
         if (coluna == 0) {
-            custo += 1000; // pra não passar da borda da direita
+            custo += custoMaximo; // pra não passar da borda da direita
             console.log("O não dá");
             console.log(custo);
             return custo;
@@ -132,7 +133,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
 
     else if (direcao == "N") {
         if (linha == 0) {
-            custo += 1000; // pra não passar da borda de cima
+            custo += custoMaximo; // pra não passar da borda de cima
             console.log("N não dá");
             return custo;
         }
@@ -157,7 +158,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
 
     else if (direcao == "L") {
         if (coluna == 9) {
-            custo += 1000; // pra não passar da borda da direita
+            custo +=custoMaximo; // pra não passar da borda da direita
             console.log("L não dá");
             return custo;
         }
@@ -172,7 +173,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
         //console.log(posAChecar == obstaculo);
 
         if(posAChecar == obstaculo) {
-            custo += 1000; console.log(custo);
+            custo += custoMaximo; console.log(custo);
         }
 
         else if(posAChecar == vazia) {
@@ -191,7 +192,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
 
     else if (direcao == "S") {
         if (linha == 9) {
-            custo += 1000; // pra não passar da borda de baixo
+            custo += custoMaximo; // pra não passar da borda de baixo
             console.log("S não dá");
             return custo;
         }
@@ -203,7 +204,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
         var posAChecar = matriz[linha + 1][coluna];
 
         if (posAChecar == obstaculo) {
-            custo += 1000;
+            custo += custoMaximo;
             console.log(custo);
         }
 
@@ -224,7 +225,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
 
     else if (direcao == "SL") {
         if (coluna == 9 || linha == 9) {
-            custo += 1000; // pra não passar da borda da direita e de baixo
+            custo += custoMaximo; // pra não passar da borda da direita e de baixo
             console.log("SL não dá");
             return custo;
         }
@@ -253,7 +254,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
     
     else if (direcao == "SO") {
         if (coluna == 0 || linha == 9) {
-            custo += 1000; // pra não passar da borda da direita e de baixo
+            custo += custoMaximo; // pra não passar da borda da direita e de baixo
             console.log("SO não dá");
             return custo;
         }
@@ -282,7 +283,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
 
     else if (direcao == "NO") {
         if (coluna == 0 || linha == 0) {
-            custo += 1000; // pra não passar da borda da direita e de baixo
+            custo += custoMaximo; // pra não passar da borda da direita e de baixo
             console.log("NO não dá");
             return custo;
         }
@@ -311,7 +312,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
 
     else if (direcao == "NL") {
         if (coluna == 9 || linha == 0) {
-            custo += 1000; // pra não passar da borda da direita e de baixo
+            custo += custoMaximo; // pra não passar da borda da direita e de baixo
             console.log("NL não dá");
             return custo;
         }

@@ -25,145 +25,142 @@ R7: tentar ir pro norte
 R8: tentar ir pro nordeste
 */
 
-// const vazia = "*";
-// const obstaculo = "□";
-// const meta = "x";
-// const robo = "■";
-// const encontrada = "●";
-// var encontradoSt = false;
-// const custoMaximo = 1000;
-// const bordaDireita = 9;
-// const bordaInferior = 9;
+/*
 
-// var matrizInicial = [];
+const vazia = "*";
+const obstaculo = "□";
+const meta = "x";
+const robo = "■";
+const encontrada = "●";
+var encontradoSt = false;
+const custoMaximo = 1000;
+const bordaDireita = 9;
+const bordaInferior = 9;
 
-// class Robo {
-//     constructor(posX, posY, direcao, anterior) {
-//         this.posX = posX;
-//         this.posY = posY;
-//         this.anterior = anterior;
-//         this.direcao = direcao;
-//         this.passos = 0;
+var matrizInicial = [];
 
-//         this.movimentos = {
-//             N: 90,
-//             NL: 45,
-//             L: 0,
-//             SL: 315,
-//             S: 270,
-//             SO: 225,
-//             O: 180,
-//             NO: 135
-//         };
+class Robo {
+    constructor(posX, posY, direcao, anterior) {
+        this.posX = posX;
+        this.posY = posY;
+        this.anterior = anterior;
+        this.direcao = direcao;
+        this.passos = 0;
 
-//         this.movimento = "";
-//     }
-// }
+        this.movimentos = {
+            N: 90,
+            NL: 45,
+            L: 0,
+            SL: 315,
+            S: 270,
+            SO: 225,
+            O: 180,
+            NO: 135
+        };
 
-// function pegarPosAleatoria(matriz) {
-//     return [(Math.floor(Math.random() * 10)), (Math.floor(Math.random() * 10))];
-// }
+        this.movimento = "";
+    }
+}
 
-// function gerarNumeroAleatorio(max) {
-//     return Math.floor(Math.random() * max) + 1;
-// }
+function pegarPosAleatoria(matriz) {
+    return [(Math.floor(Math.random() * 10)), (Math.floor(Math.random() * 10))];
+}
 
-// function criarObstaculos(matriz) {
-//     var numObstaculos = gerarNumeroAleatorio(40);
+function gerarNumeroAleatorio(max) {
+    return Math.floor(Math.random() * max) + 1;
+}
 
-//     for (var i = 0; i < numObstaculos; i++) {
-//         var gerados = [];
+function criarObstaculos(matriz) {
+    var numObstaculos = gerarNumeroAleatorio(40);
 
-//         var escolha = pegarPosAleatoria(matriz);
+    for (var i = 0; i < numObstaculos; i++) {
+        var gerados = [];
 
-//         while (gerados.includes(escolha)) {
-//             escolha = pegarPosAleatoria(matriz);
-//         }
+        var escolha = pegarPosAleatoria(matriz);
 
-//         if (!matriz.includes(escolha)) {
-//             gerados.push(escolha);
+        while (gerados.includes(escolha)) {
+            escolha = pegarPosAleatoria(matriz);
+        }
 
-//             matriz[escolha[0]][escolha[1]] = obstaculo;
-//         }
-//     }
-// }
+        if (!matriz.includes(escolha)) {
+            gerados.push(escolha);
 
-// function Exibir(matriz) {
-//     for (var i = 0; i < 10; i++) {
-//         var linha = "";
-//         for (var p = 0; p < 10; p++) {
-//             linha += matriz[i][p] + "  ";
-//         }
-//         console.log(linha);
-//     }
-// }
+            matriz[escolha[0]][escolha[1]] = obstaculo;
+        }
+    }
+}
 
-// function Iniciar() {
-//     for (var i = 0; i < 10; i++) {
-//         matrizInicial.push([vazia, vazia, vazia, vazia, vazia, vazia, vazia, vazia, vazia, vazia]);
-//     }
+function Exibir(matriz) {
+    for (var i = 0; i < 10; i++) {
+        var linha = "";
+        for (var p = 0; p < 10; p++) {
+            linha += matriz[i][p] + "  ";
+        }
+        console.log(linha);
+    }
+}
 
-//     criarObstaculos(matrizInicial);
+function Iniciar() {
+    for (var i = 0; i < 10; i++) {
+        matrizInicial.push([vazia, vazia, vazia, vazia, vazia, vazia, vazia, vazia, vazia, vazia]);
+    }
 
-//     var roboObj = new Robo(0, 0, 0, "O");
+    criarObstaculos(matrizInicial);
 
-//     matrizInicial[0][0] = robo;
-//     matrizInicial[9][9] = meta;
+    var roboObj = new Robo(0, 0, 0, "O");
 
-//     console.log("\n");
+    matrizInicial[0][0] = robo;
+    matrizInicial[9][9] = meta;
 
-//     Exibir(matrizInicial);
+    console.log("\n");
 
-//     return roboObj;
-// }
+    Exibir(matrizInicial);
 
-// function Atualizar() {
-//     Exibir(matrizInicial);
-// }
+    return roboObj;
+}
 
-// function Encontrado(passos) {
-//     console.log("\nO ROBÔ CONSEGUIU :)");
-//     console.log(passos + " passos foram dados");
-// }
+function Atualizar() {
+    Exibir(matrizInicial);
+}
 
-// function ChecarPosicao(posAChecar) {
-//     custo = 0;
+function Encontrado(passos) {
+    console.log("\nO ROBÔ CONSEGUIU :)");
+    console.log(passos + " passos foram dados");
+}
 
-//     if(posAChecar == obstaculo) {
-//         custo += 1000; console.log(custo);
-//     }
+function ChecarPosicao(posAChecar) {
+    custo = 0;
 
-//     else if(posAChecar == vazia) {
-//         custo += 0;
-//     }
+    if(posAChecar == obstaculo) {
+        custo += 1000; console.log(custo);
+    }
 
-//     return custo;
-// }
+    else if(posAChecar == vazia) {
+        custo += 0;
+    }
 
-// function RealizarMovimento(robo) {
-//     const movimentos = {
-//         L: {posicaoX: 0, posicaoY: 1, anterior: "O", direcao: robo.movimentos.L},
-//         S: {posicaoX: 1, posicaoY: 0, anterior: "N", direcao: robo.movimentos.S},
-//         O: {posicaoX: 0, posicaoY: -1, anterior: "L", direcao: robo.movimentos.O},
-//         N: {posicaoX: -1, posicaoY: 0, anterior: "S", direcao: robo.movimentos.N},
-//         SL: {posicaoX: 1, posicaoY: 1, anterior: "NO", direcao: robo.movimentos.SL},
-//         SO: {posicaoX: 1, posicaoY: -1, anterior: "NL", direcao: robo.movimentos.SO},
-//         NL: {posicaoX: -1, posicaoY: 1, anterior: "SO", direcao: robo.movimentos.NL},
-//         NO: {posicaoX: -1, posicaoY: -1, anterior: "SL", direcao: robo.movimentos.NO},
-//     };
+    return custo;
+}
 
-//     // if (robo.movimento == "L") {
-//     //     robo.posY += 1;
-//     //     robo.anterior = "O";
-//     //     robo.direcao = robo.movimentos.L;
-//     //     //console.log(robo.movimento.L);
-//     // }
+function RealizarMovimento(robo) {
+    const movimentos = {
+        L: {posicaoX: 0, posicaoY: 1, anterior: "O", direcao: robo.movimentos.L},
+        S: {posicaoX: 1, posicaoY: 0, anterior: "N", direcao: robo.movimentos.S},
+        O: {posicaoX: 0, posicaoY: -1, anterior: "L", direcao: robo.movimentos.O},
+        N: {posicaoX: -1, posicaoY: 0, anterior: "S", direcao: robo.movimentos.N},
+        SL: {posicaoX: 1, posicaoY: 1, anterior: "NO", direcao: robo.movimentos.SL},
+        SO: {posicaoX: 1, posicaoY: -1, anterior: "NL", direcao: robo.movimentos.SO},
+        NL: {posicaoX: -1, posicaoY: 1, anterior: "SO", direcao: robo.movimentos.NL},
+        NO: {posicaoX: -1, posicaoY: -1, anterior: "SL", direcao: robo.movimentos.NO},
+    };
 
-//     robo.posX += movimentos[robo.movimento].posicaoX;
-//     robo.posY += movimentos[robo.movimento].posicaoY;
-//     robo.anterior = movimentos[robo.movimento].anterior;
-//     robo.direcao = movimentos[robo.movimento].direcao;
-// }
+    robo.posX += movimentos[robo.movimento].posicaoX;
+    robo.posY += movimentos[robo.movimento].posicaoY;
+    robo.anterior = movimentos[robo.movimento].anterior;
+    robo.direcao = movimentos[robo.movimento].direcao;
+}
+
+*/
 
 //import { Iniciar, matrizInicial } from "./global.js";
 
@@ -462,7 +459,7 @@ function EscolherMovimento(matriz, roboObj, algoritmo) {
         NO: 0,
         N: 0,
         NL: 0,
-        X: 1000 // ficar parado
+        X: custoMaximo // ficar parado
     }
 
     custos.L = calcularCustoAEstrela(roboObj, matrizInicial, "L");
@@ -484,7 +481,7 @@ function EscolherMovimento(matriz, roboObj, algoritmo) {
     var menor = Math.min.apply(Math, valoresCustos);
     //console.log(menor);
 
-    var menorCusto = Object.keys(custos).filter(i => custos[i] == menor && custos[i] < 1000);
+    var menorCusto = PegarMenorCusto(custos, menor);
 
     //console.log(menorCusto);
     roboObj.movimento = menorCusto[0];

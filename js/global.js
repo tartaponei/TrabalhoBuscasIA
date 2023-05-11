@@ -20,8 +20,10 @@ const robo = "■";
 const encontrada = "●";
 var encontradoSt = false;
 const custoMaximo = 1000;
-const bordaDireita = 9;
-const bordaInferior = 9;
+const fimX = 9;
+const fimY = 9;
+const inicioX = 0;
+const inicioY = 0
 
 var matrizInicial = [];
 
@@ -95,8 +97,8 @@ function Iniciar() {
 
     var roboObj = new Robo(0, 0, 0, "O");
 
-    matrizInicial[0][0] = robo;
-    matrizInicial[9][9] = meta;
+    matrizInicial[inicioX][inicioX] = robo;
+    matrizInicial[fimY][fimY] = meta;
 
     console.log("\n");
 
@@ -114,11 +116,15 @@ function Encontrado(passos) {
     console.log(passos + " passos foram dados");
 }
 
+function PegarMenorCusto(custos, menor) {
+    return Object.keys(custos).filter(i => custos[i] == menor && custos[i] < custoMaximo)
+}
+
 function ChecarPosicao(posAChecar) {
     custo = 0;
 
     if(posAChecar == obstaculo) {
-        custo += 1000; console.log(custo);
+        custo += custoMaximo; console.log(custo);
     }
 
     else if(posAChecar == vazia) {
