@@ -153,5 +153,6 @@ function RealizarMovimento(robo) {
     robo.direcao = movimentos[robo.movimento].direcao;
 }
 
-
-//export {Robo};
+//export {Iniciar, matrizInicial};
+//module.exports = Iniciar;
+////module.exports = matrizInicial;
