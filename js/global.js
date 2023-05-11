@@ -19,7 +19,11 @@ const meta = "x";
 const robo = "■";
 const encontrada = "●";
 var encontradoSt = false;
+
 const custoMaximo = 1000;
+const numLinhasMatriz = 10;
+const numColunasMatriz = 10;
+
 const fimX = 9;
 const fimY = 9;
 const inicioX = 0;
@@ -51,7 +55,7 @@ class Robo {
 }
 
 function pegarPosAleatoria(matriz) {
-    return [(Math.floor(Math.random() * 10)), (Math.floor(Math.random() * 10))];
+    return [(Math.floor(Math.random() * numLinhasMatriz)), (Math.floor(Math.random() * numColunasMatriz))];
 }
 
 function gerarNumeroAleatorio(max) {
@@ -79,9 +83,9 @@ function criarObstaculos(matriz) {
 }
 
 function Exibir(matriz) {
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < numLinhasMatriz; i++) {
         var linha = "";
-        for (var p = 0; p < 10; p++) {
+        for (var p = 0; p < numColunasMatriz; p++) {
             linha += matriz[i][p] + "  ";
         }
         console.log(linha);
@@ -89,8 +93,12 @@ function Exibir(matriz) {
 }
 
 function Iniciar() {
-    for (var i = 0; i < 10; i++) {
-        matrizInicial.push([vazia, vazia, vazia, vazia, vazia, vazia, vazia, vazia, vazia, vazia]);
+    for (var i = 0; i < numLinhasMatriz; i++) {
+        var vetor = [];
+        for (var p = 0; p < numColunasMatriz; p++) {
+            vetor.push(vazia)
+        }
+        matrizInicial.push(vetor);
     }
 
     criarObstaculos(matrizInicial);
@@ -114,6 +122,46 @@ function Atualizar() {
 function Encontrado(passos) {
     console.log("\nO ROBÔ CONSEGUIU :)");
     console.log(passos + " passos foram dados");
+}
+
+function EscolherMovimento(roboObj, matriz, custos) {
+    var valoresCustos = [];
+
+    for (var direcao in custos) {
+        valoresCustos.push(custos[direcao]);
+        //console.log(custos[direcao]);
+    }
+
+    var menorValor = Math.min.apply(Math, valoresCustos);
+    //console.log(menor);
+
+    var menorCusto = PegarMenorCusto(custos, menorValor); // pega a key
+
+    //console.log(menorCusto);
+    roboObj.movimento = menorCusto[0];
+    console.log(menorCusto[0]);
+    console.log(roboObj.movimento);
+
+    matriz[roboObj.posX][roboObj.posY] = vazia;
+
+    RealizarMovimento(roboObj);
+
+    console.log(roboObj.posX + ", " + roboObj.posY);
+    matriz[roboObj.posX][roboObj.posY] = robo;
+
+    console.clear();
+    console.log("\n");
+    console.log(custos);
+    Exibir(matrizInicial);
+
+    roboObj.passos += 1;
+
+    if (roboObj.posY == fimY && roboObj.posX == fimX) {
+        matriz[fimX][fimY] = encontrada; 
+        console.clear();
+        Exibir(matriz);
+        Encontrado(roboObj.passos);
+    }
 }
 
 function PegarMenorCusto(custos, menor) {

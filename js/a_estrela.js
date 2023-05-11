@@ -169,9 +169,9 @@ function RealizarMovimento(robo) {
 //const matrizInicial = require('matrizInicial');
 
 function CalcularDistanciaRet(linha, coluna) {
-        var distanciaLinha = 9 - linha;
+        var distanciaLinha = numLinhasMatriz - linha;
         console.log("distancia x: " + distanciaLinha);
-        var distanciaColuna = 9 - coluna;
+        var distanciaColuna = numColunasMatriz - coluna;
         console.log("distancia y: " + distanciaColuna);
 
         return distanciaColuna + distanciaLinha;
@@ -449,7 +449,7 @@ function calcularCustoAEstrela(robo, matriz, direcao) {
     return custo;
 }
 
-function EscolherMovimento(matriz, roboObj, algoritmo) {
+function VerificarMovimentosAEstrela(matriz, robo) {
     var custos = { // estão na ordem de prioridade
         L: 0,
         SL: 0,
@@ -462,66 +462,29 @@ function EscolherMovimento(matriz, roboObj, algoritmo) {
         X: custoMaximo // ficar parado
     }
 
-    custos.L = calcularCustoAEstrela(roboObj, matrizInicial, "L");
-    custos.S = calcularCustoAEstrela(roboObj, matrizInicial, "S");
-    custos.O = calcularCustoAEstrela(roboObj, matrizInicial, "O");
-    custos.N = calcularCustoAEstrela(roboObj, matrizInicial, "N");
-    custos.SL = calcularCustoAEstrela(roboObj, matrizInicial, "SL");
-    custos.SO = calcularCustoAEstrela(roboObj, matrizInicial, "SO");
-    custos.NO = calcularCustoAEstrela(roboObj, matrizInicial, "NO");
-    custos.NL = calcularCustoAEstrela(roboObj, matrizInicial, "NL");
+    custos.L = calcularCustoAEstrela(robo, matrizInicial, "L");
+    custos.S = calcularCustoAEstrela(robo, matrizInicial, "S");
+    custos.O = calcularCustoAEstrela(robo, matrizInicial, "O");
+    custos.N = calcularCustoAEstrela(robo, matrizInicial, "N");
+    custos.SL = calcularCustoAEstrela(robo, matrizInicial, "SL");
+    custos.SO = calcularCustoAEstrela(robo, matrizInicial, "SO");
+    custos.NO = calcularCustoAEstrela(robo, matrizInicial, "NO");
+    custos.NL = calcularCustoAEstrela(robo, matrizInicial, "NL");
 
-    var valoresCustos = [];
-
-    for (var direcao in custos) {
-        valoresCustos.push(custos[direcao]);
-        //console.log(custos[direcao]);
-    }
-
-    var menor = Math.min.apply(Math, valoresCustos);
-    //console.log(menor);
-
-    var menorCusto = PegarMenorCusto(custos, menor);
-
-    //console.log(menorCusto);
-    roboObj.movimento = menorCusto[0];
-    console.log(menorCusto[0]);
-    console.log(roboObj.movimento);
-
-    matriz[roboObj.posX][roboObj.posY] = vazia;
-
-    RealizarMovimento(roboObj);
-
-    console.log(roboObj.posX + ", " + roboObj.posY);
-    matriz[roboObj.posX][roboObj.posY] = robo;
-
-    console.clear();
-    console.log("\n");
-    console.log(custos);
-    Exibir(matrizInicial);
-
-    roboObj.passos += 1;
-
-    if (roboObj.posY == 9 && roboObj.posX == 9) {
-        matriz[9][9] = encontrada; 
-        console.clear();
-        Exibir(matriz);
-        console.log(custos);
-        Encontrado(roboObj.passos);
-    }
+    EscolherMovimento(robo, matriz, custos);
 }
 
 function a_estrela() {
     var roboObj = Iniciar();
 
     function executarMovimentacao() {
-        if (matrizInicial[9][9] !== encontrada) { /// se o robo não tiver chegado
-            EscolherMovimento(matrizInicial, roboObj, "a estrela");
-            setTimeout(executarMovimentacao, 1000);
+        if (matrizInicial[fimX][fimY] !== encontrada) { /// se o robo não tiver chegado
+            VerificarMovimentosAEstrela(matrizInicial, roboObj);
+            setTimeout(executarMovimentacao, 500);
         }
     }
 
-    setTimeout(executarMovimentacao, 1000);
+    setTimeout(executarMovimentacao, 500);
 }
 
 //a_estrela();
