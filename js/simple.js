@@ -212,15 +212,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
         var posAChecar = matriz[linha][coluna - 1];
         console.log(posAChecar);
 
-        if (posAChecar == obstaculo) {
-            custo += 1000;
-            console.log(custo)
-        }
-
-        else if (posAChecar == vazia) {
-            custo += 0;
-            console.log(custo)
-        }
+        custo += ChecarPosicao(posAChecar);
 
         if (robo.direcao == 0) custo += 4;
         else if (robo.direcao == 45) custo += 3;
@@ -245,15 +237,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
 
         var posAChecar = matriz[linha - 1][coluna];
         
-        if (posAChecar == obstaculo) {
-            custo += 1000;
-            console.log(custo)
-        }
-
-        else if (posAChecar == vazia) {
-            custo += 0;
-            console.log(custo)
-        }
+        custo += ChecarPosicao(posAChecar);
 
         if (robo.direcao == 0) custo += 2;
         else if (robo.direcao == 45) custo += 1;
@@ -381,12 +365,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
 
         //console.log(posAChecar == obstaculo);
 
-        if(posAChecar == obstaculo) {
-            custo += 1000; console.log(custo);
-        }
-        else if(posAChecar == vazia) {
-            custo += 0;
-        }
+        custo += ChecarPosicao(posAChecar);
 
         if (robo.direcao == 0) custo += 3;
         else if (robo.direcao == 45) custo += 4;
@@ -415,12 +394,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
 
         //console.log(posAChecar == obstaculo);
 
-        if(posAChecar == obstaculo) {
-            custo += 1000; console.log(custo);
-        }
-        else if(posAChecar == vazia) {
-            custo += 0;
-        }
+        custo += ChecarPosicao(posAChecar);
 
         if (robo.direcao == 0) custo += 3;
         else if (robo.direcao == 45) custo += 2;
@@ -449,12 +423,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
 
         //console.log(posAChecar == obstaculo);
 
-        if(posAChecar == obstaculo) {
-            custo += 1000; console.log(custo);
-        }
-        else if(posAChecar == vazia) {
-            custo += 0;
-        }
+        custo += ChecarPosicao(posAChecar);
 
         if (robo.direcao == 0) custo += 1;
         else if (robo.direcao == 45) custo += 0;
@@ -619,4 +588,4 @@ function main() {
     setTimeout(executarMovimentacao, 500);
 }
 
-main();
+//main();
