@@ -24,12 +24,15 @@ R7: ir pro norte
 R8: ir pro nordeste
 */
 
-var vazia = "*";
-var obstaculo = "□";
-var meta = "x";
-var robo = "■";
-var encontrada = "●";
+const vazia = "*";
+const obstaculo = "□";
+const meta = "x";
+const robo = "■";
+const encontrada = "●";
 var encontradoSt = false;
+const custoMaximo = 1000;
+const bordaDireita = 9;
+const bordaInferior = 9;
 
 var matrizInicial = [];
 
@@ -45,7 +48,7 @@ class Robo {
             N: 90,
             NL: 45,
             L: 0,
-            SE: 315,
+            SL: 315,
             S: 270,
             SO: 225,
             O: 180,
@@ -116,6 +119,58 @@ function Iniciar() {
 function Encontrado(passos) {
     console.log("\nO ROBÔ CONSEGUIU :)");
     console.log(passos + " passos foram dados");
+}
+
+function CalcularCustoGPT(robo, matriz, direcao) {
+    const movimentos = {
+        O: { deltaColuna: -1, deltaLinha: 0 },
+        N: { deltaColuna: 0, deltaLinha: -1 },
+        L: { deltaColuna: 1, deltaLinha: 0 },
+        S: { deltaColuna: 0, deltaLinha: 1 },
+        SL: { deltaColuna: 1, deltaLinha: 1 },
+        SO: { deltaColuna: -1, deltaLinha: 1 },
+        NO: { deltaColuna: -1, deltaLinha: -1 },
+        NL: { deltaColuna: 1, deltaLinha: -1 },
+    };
+
+    const { deltaColuna, deltaLinha } = movimentos[direcao];
+    const novaColuna = robo.posY + deltaColuna;
+    const novaLinha = robo.posX + deltaLinha;
+
+    if (novaColuna < 0 || novaColuna > bordaDireita || novaLinha < 0 || novaLinha > bordaInferior) {
+        console.log(`${direcao} não é possível`);
+        return custoMaximo;
+    }
+
+    if (robo.anterior === direcao) {
+        custo += 500;
+    }
+
+    const posAChecar = matriz[novaLinha][novaColuna];
+
+    if (posAChecar === obstaculo) {
+        custo += custoMaximo;
+    } 
+    else if (posAChecar === vazia) {
+        custo += 0;
+    }
+
+    const custos = {
+        0: [4, 2, 0, 0, 0, 3, 2, 1],
+        45: [3, 1, 1, 0, 1, 4, 3, 2],
+        90: [2, 0, 2, 1, 2, 3, 2, 1],
+        135: [1, 1, 3, 2, 3, 2, 1, 0],
+        180: [0, 2, 4, 3, 2, 1, 0, 1],
+        225: [1, 3, 3, 4, 1, 0, 1, 2],
+        270: [2, 4, 2, 3, 0, 1, 2, 3],
+        315: [3, 3, 1, 2, 1, 2, 3, 4],
+    };
+
+    const custoMovimento = custos[robo.direcao][direcao / 45];
+    custo += custoMovimento;
+
+    console.log(custo);
+    return custo;
 }
 
 function calcularCustoDirecao(robo, matriz, direcao) {
@@ -407,8 +462,62 @@ function calcularCustoDirecao(robo, matriz, direcao) {
     return custo;
 }
 
+function RealizarMovimento(robo) {
+    if (robo.movimento == "L") {
+        robo.posY += 1;
+        robo.anterior = "O";
+        robo.direcao = robo.movimentos.L;
+        //console.log(robo.movimento.L);
+    }
 
-function Movimentar(matriz, roboObj, algoritmo) {
+    else if (robo.movimento == "S") {
+        robo.posX += 1;
+        robo.anterior = "N";
+        robo.direcao = robo.movimentos.S;
+    }
+
+    else if (robo.movimento == "O") {
+        robo.posY -= 1;
+        robo.anterior = "L";
+        robo.direcao = robo.movimentos.O;
+    }
+
+    else if (robo.movimento == "N") {
+        robo.posX -= 1;
+        robo.anterior = "S";
+        robo.direcao = robo.movimentos.N;
+    }
+
+    else if (robo.movimento == "SL") {
+        robo.posX += 1;
+        robo.posY += 1;
+        robo.anterior = "NO";
+        robo.direcao = robo.movimentos.SL;
+    }
+
+    else if (robo.movimento == "SO") {
+        robo.posX += 1;
+        robo.posY -= 1;
+        robo.anterior = "NL";
+        robo.direcao = robo.movimentos.SO;
+    }
+
+    else if (robo.movimento == "NL") {
+        robo.posX -= 1;
+        robo.posY += 1;
+        robo.anterior = "SO";
+        robo.direcao = robo.movimentos.NL;
+    }
+
+    else if (robo.movimento == "NO") {
+        robo.posX -= 1;
+        robo.posY -= 1;
+        robo.anterior = "SL";
+        robo.direcao = robo.movimentos.NO;
+    }
+}
+
+function EscolherMovimento(matriz, roboObj, algoritmo) {
     var custos = { // estão na ordem de prioridade
         L: 0,
         SL: 0,
@@ -450,58 +559,7 @@ function Movimentar(matriz, roboObj, algoritmo) {
 
         matriz[roboObj.posX][roboObj.posY] = vazia;
 
-        if (roboObj.movimento == "L") {
-            roboObj.posY += 1;
-            roboObj.anterior = "O";
-            roboObj.direcao = roboObj.movimentos.L;
-            console.log(roboObj.movimento.L);
-        }
-
-        else if (roboObj.movimento == "S") {
-            roboObj.posX += 1;
-            roboObj.anterior = "N";
-            roboObj.direcao = roboObj.movimentos.S;
-        }
-
-        else if (roboObj.movimento == "O") {
-            roboObj.posY -= 1;
-            roboObj.anterior = "L";
-            roboObj.direcao = roboObj.movimentos.O;
-        }
-
-        else if (roboObj.movimento == "N") {
-            roboObj.posX -= 1;
-            roboObj.anterior = "S";
-            roboObj.direcao = roboObj.movimentos.N;
-        }
-
-        else if (roboObj.movimento == "SL") {
-            roboObj.posX += 1;
-            roboObj.posY += 1;
-            roboObj.anterior = "NO";
-            roboObj.direcao = roboObj.movimentos.SL;
-        }
-
-        else if (roboObj.movimento == "SO") {
-            roboObj.posX += 1;
-            roboObj.posY -= 1;
-            roboObj.anterior = "NL";
-            roboObj.direcao = roboObj.movimentos.SO;
-        }
-
-        else if (roboObj.movimento == "NL") {
-            roboObj.posX -= 1;
-            roboObj.posY += 1;
-            roboObj.anterior = "SO";
-            roboObj.direcao = roboObj.movimentos.NL;
-        }
-
-        else if (roboObj.movimento == "NO") {
-            roboObj.posX -= 1;
-            roboObj.posY -= 1;
-            roboObj.anterior = "SL";
-            roboObj.direcao = roboObj.movimentos.NO;
-        }
+        RealizarMovimento(roboObj);
 
         console.log(roboObj.posX + ", " + roboObj.posY);
         matriz[roboObj.posX][roboObj.posY] = robo;
@@ -535,7 +593,7 @@ function main() {
 
     function executarMovimentacao() {
         if (matrizInicial[9][9] !== encontrada) { /// se o robo não tiver chegado
-            Movimentar(matrizInicial, roboObj, "vizinho mais proximo");
+            EscolherMovimento(matrizInicial, roboObj, "vizinho mais proximo");
             setTimeout(executarMovimentacao, 500);
         }
     }
