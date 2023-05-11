@@ -23,8 +23,75 @@ R6: ir pro noroeste
 R7: ir pro norte
 R8: ir pro nordeste
 */
+function EscolherMovimento(matriz, roboObj, algoritmo) {
+    var custos = { // estão na ordem de prioridade
+        L: 0,
+        SL: 0,
+        S: 0,
+        SO: 0,
+        O: 0,
+        NO: 0,
+        N: 0,
+        NL: 0,
+        X: 10000 // ficar parado
+    }
 
-//import {Robo} from "./global";
+    custos.L = calcularCustoDirecao(roboObj, matrizInicial, "L");
+    custos.S = calcularCustoDirecao(roboObj, matrizInicial, "S");
+    custos.O = calcularCustoDirecao(roboObj, matrizInicial, "O");
+    custos.N = calcularCustoDirecao(roboObj, matrizInicial, "N");
+    custos.SL = calcularCustoDirecao(roboObj, matrizInicial, "SL");
+    custos.SO = calcularCustoDirecao(roboObj, matrizInicial, "SO");
+    custos.NO = calcularCustoDirecao(roboObj, matrizInicial, "NO");
+    custos.NL = calcularCustoDirecao(roboObj, matrizInicial, "NL");
+
+    // custos.L = CalcularCustoGPT(roboObj, matrizInicial, "L");
+    // custos.S = CalcularCustoGPT(roboObj, matrizInicial, "S");
+    // custos.O = CalcularCustoGPT(roboObj, matrizInicial, "O");
+    // custos.N = CalcularCustoGPT(roboObj, matrizInicial, "N");
+    // custos.SL = CalcularCustoGPT(roboObj, matrizInicial, "SL");
+    // custos.SO = CalcularCustoGPT(roboObj, matrizInicial, "SO");
+    // custos.NO = CalcularCustoGPT(roboObj, matrizInicial, "SL");
+    // custos.NL = CalcularCustoGPT(roboObj, matrizInicial, "SL");
+
+    var valoresCustos = [];
+
+    for (var direcao in custos) {
+        valoresCustos.push(custos[direcao]);
+        //console.log(custos[direcao]);
+    }
+
+    var menor = Math.min.apply(Math, valoresCustos);
+    //console.log(menor);
+
+    var menorCusto = Object.keys(custos).filter(i => custos[i] == menor && custos[i] < 1000);
+
+    //console.log(menorCusto);
+    roboObj.movimento = menorCusto[0];
+    console.log(menorCusto[0]);
+    console.log(roboObj.movimento);
+
+    matriz[roboObj.posX][roboObj.posY] = vazia;
+
+    RealizarMovimento(roboObj);
+
+    console.log(roboObj.posX + ", " + roboObj.posY);
+    matriz[roboObj.posX][roboObj.posY] = robo;
+
+    console.clear();
+    console.log("\n");
+    console.log(custos);
+    Exibir(matrizInicial);
+
+    roboObj.passos += 1;
+
+    if (roboObj.posY == 9 && roboObj.posX == 9) {
+        matriz[9][9] = encontrada; 
+        console.clear();
+        Exibir(matriz);
+        Encontrado(roboObj.passos);
+    }
+}
 
 function calcularCustoDirecao(robo, matriz, direcao) {
     var linha = robo.posX;
@@ -145,10 +212,7 @@ function calcularCustoDirecao(robo, matriz, direcao) {
             console.log(custo);
         }
 
-        if (robo.direcao == 0) {
-            custo = custo + 2;
-            console.log(custo);
-        }
+        if (robo.direcao == 0) custo = custo + 2;
         else if (robo.direcao == 45) custo += 3;
         else if (robo.direcao == 90) custo += 4;
         else if (robo.direcao == 135) custo += 3;
@@ -277,76 +341,6 @@ function calcularCustoDirecao(robo, matriz, direcao) {
     console.log(custo);
 
     return custo;
-}
-
-function EscolherMovimento(matriz, roboObj, algoritmo) {
-    var custos = { // estão na ordem de prioridade
-        L: 0,
-        SL: 0,
-        S: 0,
-        SO: 0,
-        O: 0,
-        NO: 0,
-        N: 0,
-        NL: 0,
-        X: 10000 // ficar parado
-    }
-
-    custos.L = calcularCustoDirecao(roboObj, matrizInicial, "L");
-    custos.S = calcularCustoDirecao(roboObj, matrizInicial, "S");
-    custos.O = calcularCustoDirecao(roboObj, matrizInicial, "O");
-    custos.N = calcularCustoDirecao(roboObj, matrizInicial, "N");
-    custos.SL = calcularCustoDirecao(roboObj, matrizInicial, "SL");
-    custos.SO = calcularCustoDirecao(roboObj, matrizInicial, "SO");
-    custos.NO = calcularCustoDirecao(roboObj, matrizInicial, "NO");
-    custos.NL = calcularCustoDirecao(roboObj, matrizInicial, "NL");
-
-    // custos.L = CalcularCustoGPT(roboObj, matrizInicial, "L");
-    // custos.S = CalcularCustoGPT(roboObj, matrizInicial, "S");
-    // custos.O = CalcularCustoGPT(roboObj, matrizInicial, "O");
-    // custos.N = CalcularCustoGPT(roboObj, matrizInicial, "N");
-    // custos.SL = CalcularCustoGPT(roboObj, matrizInicial, "SL");
-    // custos.SO = CalcularCustoGPT(roboObj, matrizInicial, "SO");
-    // custos.NO = CalcularCustoGPT(roboObj, matrizInicial, "SL");
-    // custos.NL = CalcularCustoGPT(roboObj, matrizInicial, "SL");
-
-    var valoresCustos = [];
-
-    for (var direcao in custos) {
-        valoresCustos.push(custos[direcao]);
-        //console.log(custos[direcao]);
-    }
-
-    var menor = Math.min.apply(Math, valoresCustos);
-    //console.log(menor);
-
-    var menorCusto = Object.keys(custos).filter(i => custos[i] == menor && custos[i] < 1000);
-
-    //console.log(menorCusto);
-    roboObj.movimento = menorCusto[0];
-    console.log(menorCusto[0]);
-    console.log(roboObj.movimento);
-
-    matriz[roboObj.posX][roboObj.posY] = vazia;
-
-    RealizarMovimento(roboObj);
-
-    console.log(roboObj.posX + ", " + roboObj.posY);
-    matriz[roboObj.posX][roboObj.posY] = robo;
-
-    console.clear();
-    console.log("\n");
-    console.log(custos);
-    Exibir(matrizInicial);
-
-    roboObj.passos += 1;
-
-    if (roboObj.posY == 9 && roboObj.posX == 9) {
-        matriz[9][9] = encontrada; 
-        console.clear();
-        Exibir(matriz);
-        Encontrado(roboObj.passos);
-    }
 }
 
 function vizinho_prox() {

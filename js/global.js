@@ -1,3 +1,18 @@
+/* 
+0 = branco, célula vazia -> *
+1 = azul, contém um obstáculo -> □
+2 = laranja, contém a meta -> x
+3 = verde, contém o robô -> ■
+4 = vermelha, meta encontrada -> ●
+*/
+
+/* 
+Ficar parado = 1000
+Girar 45º = 1
+Bater em um obstáculo = 1000
+Seguir na direção atual = 0
+*/
+
 const vazia = "*";
 const obstaculo = "□";
 const meta = "x";
