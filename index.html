@@ -13,12 +13,21 @@
 
     <title>Busca pelo Destino</title>
 </head>
-<body>
-    <!-- <canvas id="canvas" width="948" height="592">
-           Seu navegador não suporta o recurso de Canvas. Por favor, tente novamente com um navegador diferente.
-    </canvas> -->
-
-    <button onclick="vizinho_prox()">Gerar -> Vizinho + Próximo</button><br/>
+<body> 
+    <button id="viz" onclick="vizinho_prox()">Gerar -> Vizinho + Próximo</button>
     <button onclick="a_estrela()">Gerar -> A*</button>
+
+    <div id="conteudo">
+        <table id="tabela"></table>
+    </div>
+
+    <h2 id="algoritmo"></h2>
+    <h2 id="passos"></h2>
+
+    <p>* = branco, célula vazia</p>
+    <p>□ = azul, contém um obstáculo</p> 
+    <p>x = laranja, contém a meta</p> 
+    <p>■ = verde, contém o robô</p> 
+    <p>● = vermelha, meta encontrada</p> 
 </body>
 </html>

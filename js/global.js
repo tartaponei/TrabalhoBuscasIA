@@ -54,6 +54,23 @@ class Robo {
     }
 }
 
+function mostraTabela(matriz) {
+    var table = document.getElementById("tabela");
+
+    table.innerHTML = '';
+
+    for(var linha = 0; linha < numLinhasMatriz; linha++) {
+        var trNova = document.createElement("tr");
+        for (var coluna = 0; coluna < numColunasMatriz; coluna++) {
+            var tdNova = document.createElement("td");
+            var conteudo = document.createTextNode(matriz[linha][coluna]);
+            tdNova.appendChild(conteudo);
+            trNova.appendChild(tdNova);
+        }
+        table.appendChild(trNova);
+    }
+}
+
 function pegarPosAleatoria(matriz) {
     return [(Math.floor(Math.random() * numLinhasMatriz)), (Math.floor(Math.random() * numColunasMatriz))];
 }
@@ -93,6 +110,10 @@ function Exibir(matriz) {
 }
 
 function Encontrado(passos) {
+    var textoPassos = document.getElementById("passos");
+    const texto = passos + " passos foram dados";
+    textoPassos.innerHTML = texto;
+
     console.log("\nO ROBÔ CONSEGUIU :)");
     console.log(passos + " passos foram dados");
 }
@@ -127,12 +148,15 @@ function EscolherMovimento(roboObj, matriz, custos) {
     console.log(custos);
     Exibir(matrizInicial);
 
+    mostraTabela(matriz);
+
     roboObj.passos += 1;
 
     if (roboObj.posY == fimY && roboObj.posX == fimX) {
         matriz[fimX][fimY] = encontrada; 
         console.clear();
         Exibir(matriz);
+        mostraTabela(matriz);
         Encontrado(roboObj.passos);
     }
 }
@@ -182,11 +206,18 @@ function RealizarMovimento(robo) {
 
 function Rodar(algoritmo) {
     var roboObj = Iniciar();
+    var textoAlg = document.getElementById("algoritmo");
 
     function executarMovimentacao() {
         if (matrizInicial[fimX][fimY] !== encontrada) { /// se o robo não tiver chegado
-            if(algoritmo == "a estrela") VerificarMovimentosAEstrela(matrizInicial, roboObj);
-            else if(algoritmo == "vizinho mais proximo") VerificarMovimentosVizProx(matrizInicial, roboObj);
+            if(algoritmo == "a estrela") {
+                VerificarMovimentosAEstrela(matrizInicial, roboObj);
+                textoAlg.innerHTML="Procurando via: A*";
+            }
+            else if(algoritmo == "vizinho mais proximo") {
+                VerificarMovimentosVizProx(matrizInicial, roboObj);
+                textoAlg.innerHTML="Procurando via: Vizinho Mais Próximo";
+            }
             setTimeout(executarMovimentacao, 500);
         }
     }
@@ -213,6 +244,19 @@ function Iniciar() {
     console.log("\n");
 
     Exibir(matrizInicial);
+
+    for(var linha = 0; linha < numLinhasMatriz; linha++) {
+        var table = document.getElementById("tabela");
+        
+        var trNova = document.createElement("tr");
+        for (var coluna = 0; coluna < numColunasMatriz; coluna++) {
+            var tdNova = document.createElement("td");
+            var conteudo = document.createTextNode(matrizInicial[linha][coluna]);
+            tdNova.appendChild(conteudo);
+            trNova.appendChild(tdNova);
+        }
+        table.appendChild(trNova);
+    }
 
     return roboObj;
 }
