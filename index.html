@@ -14,14 +14,17 @@
     <title>Busca pelo Destino</title>
 </head>
 <body> 
-    <button id="viz" onclick="vizinho_prox()">Gerar -> Vizinho + Próximo</button>
-    <button onclick="a_estrela()">Gerar -> A*</button>
+    <div class="botoes">
+        <button id="viz" onclick="vizinho_prox()">Gerar -> Vizinho + Próximo</button>
+        <button id="a_est" onclick="a_estrela()">Gerar -> A*</button>
+    </div>
+    
+    <h2 id="algoritmo"></h2>
 
     <div id="conteudo">
         <table id="tabela"></table>
     </div>
 
-    <h2 id="algoritmo"></h2>
     <h2 id="passos"></h2>
 
     <p>* = branco, célula vazia</p>
