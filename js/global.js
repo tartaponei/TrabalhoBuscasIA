@@ -218,11 +218,11 @@ function Rodar(algoritmo) {
                 VerificarMovimentosVizProx(matrizInicial, roboObj);
                 textoAlg.innerHTML="Procurando via: Vizinho Mais Próximo";
             }
-            setTimeout(executarMovimentacao, 500);
+            setTimeout(executarMovimentacao, 300);
         }
     }
 
-    setTimeout(executarMovimentacao, 500);
+    setTimeout(executarMovimentacao, 300);
 }
 
 function Iniciar() {
@@ -245,9 +245,13 @@ function Iniciar() {
 
     Exibir(matrizInicial);
 
+    var table = document.getElementById("tabela");
+    if(table.innerHTML != '') table.innerHTML = '';
+
+    var textoPassos = document.getElementById("passos");
+    if(textoPassos.innerHTML != '') textoPassos.innerHTML = '';
+
     for(var linha = 0; linha < numLinhasMatriz; linha++) {
-        var table = document.getElementById("tabela");
-        
         var trNova = document.createElement("tr");
         for (var coluna = 0; coluna < numColunasMatriz; coluna++) {
             var tdNova = document.createElement("td");
